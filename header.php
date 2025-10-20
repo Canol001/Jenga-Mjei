@@ -21,82 +21,85 @@ $loggedin = isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true;
 <body class="min-h-screen bg-gray-50 flex flex-col">
 
   <!-- Header -->
-  <header class="bg-white border-b border-gray-200 sticky top-0 z-50">
-    <div class="max-w-[100rem] mx-auto px-2 sm:px-4 lg:px-8 py-2 sm:py-3">
-      <div class="flex justify-between items-center">
-        <!-- Logo -->
-        <a href="homepage.php" class="flex items-center space-x-2 sm:space-x-3">
-          <i data-lucide="package" class="w-6 sm:w-8 h-6 sm:h-8 text-gray-600"></i>
-          <span class="text-lg sm:text-xl font-semibold text-gray-600">Jenga-Mjei</span>
+<header class="bg-white border-b border-gray-200 sticky top-0 z-50">
+  <div class="max-w-[100rem] mx-auto px-3 sm:px-6 lg:px-8 py-3">
+    <div class="flex justify-between items-center">
+      <!-- Logo -->
+      <a href="homepage.php" class="flex items-center space-x-2">
+        <i data-lucide="package" class="w-6 h-6 text-gray-600"></i>
+        <span class="text-lg font-semibold text-gray-700">Jenga-Mjei</span>
+      </a>
+
+      <?php if ($loggedin): ?>
+      <!-- Desktop Navigation -->
+      <nav class="hidden md:flex items-center space-x-4">
+        <a href="dashboard.php" class="flex items-center space-x-1 text-gray-600 hover:text-gray-900">
+          <i data-lucide="bar-chart-3" class="w-4 h-4"></i><span>Dashboard</span>
         </a>
+        <a href="inventory.php" class="flex items-center space-x-1 text-gray-600 hover:text-gray-900">
+          <i data-lucide="package" class="w-4 h-4"></i><span>Inventory</span>
+        </a>
+        <a href="sales.php" class="flex items-center space-x-1 text-gray-600 hover:text-gray-900">
+          <i data-lucide="shopping-cart" class="w-4 h-4"></i><span>Sales</span>
+        </a>
+        <a href="customers.php" class="flex items-center space-x-1 text-gray-600 hover:text-gray-900">
+          <i data-lucide="users" class="w-4 h-4"></i><span>Customers</span>
+        </a>
+        <a href="suppliers.php" class="flex items-center space-x-1 text-gray-600 hover:text-gray-900">
+          <i data-lucide="truck" class="w-4 h-4"></i><span>Suppliers</span>
+        </a>
+        <a href="users.php" class="flex items-center space-x-1 text-gray-600 hover:text-gray-900">
+          <i data-lucide="settings" class="w-4 h-4"></i><span>Users</span>
+        </a>
+      </nav>
 
-        <!-- Navigation (Shown only if logged in) -->
-        <?php if ($loggedin): ?>
-          <nav class="hidden md:flex space-x-2 sm:space-x-4">
-            <a href="dashboard.php" class="flex items-center space-x-1 sm:space-x-2 px-2 py-1 sm:px-3 sm:py-2 rounded-md text-xs sm:text-sm font-medium text-gray-600 hover:text-gray-600">
-              <i data-lucide="bar-chart-3" class="w-3 sm:w-4 h-3 sm:h-4"></i><span>Dashboard</span>
-            </a>
-            <a href="inventory.php" class="flex items-center space-x-1 sm:space-x-2 px-2 py-1 sm:px-3 sm:py-2 rounded-md text-xs sm:text-sm font-medium text-gray-600 hover:text-gray-600">
-              <i data-lucide="package" class="w-3 sm:w-4 h-3 sm:h-4"></i><span>Inventory</span>
-            </a>
-            <a href="sales.php" class="flex items-center space-x-1 sm:space-x-2 px-2 py-1 sm:px-3 sm:py-2 rounded-md text-xs sm:text-sm font-medium text-gray-600 hover:text-gray-600">
-              <i data-lucide="shopping-cart" class="w-3 sm:w-4 h-3 sm:h-4"></i><span>Sales</span>
-            </a>
-            <a href="customers.php" class="flex items-center space-x-1 sm:space-x-2 px-2 py-1 sm:px-3 sm:py-2 rounded-md text-xs sm:text-sm font-medium text-gray-600 hover:text-gray-600">
-              <i data-lucide="users" class="w-3 sm:w-4 h-3 sm:h-4"></i><span>Customers</span>
-            </a>
-            <a href="suppliers.php" class="flex items-center space-x-1 sm:space-x-2 px-2 py-1 sm:px-3 sm:py-2 rounded-md text-xs sm:text-sm font-medium text-gray-600 hover:text-gray-600">
-              <i data-lucide="truck" class="w-3 sm:w-4 h-3 sm:h-4"></i><span>Suppliers</span>
-            </a>
-            <a href="users.php" class="flex items-center space-x-1 sm:space-x-2 px-2 py-1 sm:px-3 sm:py-2 rounded-md text-xs sm:text-sm font-medium text-gray-600 hover:text-gray-600">
-              <i data-lucide="settings" class="w-3 sm:w-4 h-3 sm:h-4"></i><span>Users</span>
-            </a>
-          </nav>
-
-          <!-- Mobile Navigation (Shown only if logged in) -->
-          <div id="mobile-menu" class="hidden md:hidden border-t border-gray-200 bg-white">
-            <div class="px-2 sm:px-4 pt-2 sm:pt-3 pb-2 sm:pb-4 space-y-1 sm:space-y-2">
-              <a href="dashboard.php" class="flex items-center space-x-2 px-2 py-1 sm:px-3 sm:py-2 rounded-md text-sm sm:text-base text-gray-600 hover:bg-gray-100 hover:text-gray-600">
-                <i data-lucide="bar-chart-3" class="w-4 sm:w-5 h-4 sm:h-5"></i><span>Dashboard</span>
-              </a>
-              <a href="inventory.php" class="flex items-center space-x-2 px-2 py-1 sm:px-3 sm:py-2 rounded-md text-sm sm:text-base text-gray-600 hover:bg-gray-100 hover:text-gray-600">
-                <i data-lucide="package" class="w-4 sm:w-5 h-4 sm:h-5"></i><span>Inventory</span>
-              </a>
-              <a href="sales.php" class="flex items-center space-x-2 px-2 py-1 sm:px-3 sm:py-2 rounded-md text-sm sm:text-base text-gray-600 hover:bg-gray-100 hover:text-gray-600">
-                <i data-lucide="shopping-cart" class="w-4 sm:w-5 h-4 sm:h-5"></i><span>Sales</span>
-              </a>
-              <a href="customers.php" class="flex items-center space-x-2 px-2 py-1 sm:px-3 sm:py-2 rounded-md text-sm sm:text-base text-gray-600 hover:bg-gray-100 hover:text-gray-600">
-                <i data-lucide="users" class="w-4 sm:w-5 h-4 sm:h-5"></i><span>Customers</span>
-              </a>
-              <a href="suppliers.php" class="flex items-center space-x-2 px-2 py-1 sm:px-3 sm:py-2 rounded-md text-sm sm:text-base text-gray-600 hover:bg-gray-100 hover:text-gray-600">
-                <i data-lucide="truck" class="w-4 sm:w-5 h-4 sm:h-5"></i><span>Suppliers</span>
-              </a>
-              <a href="users.php" class="flex items-center space-x-2 px-2 py-1 sm:px-3 sm:py-2 rounded-md text-sm sm:text-base text-gray-600 hover:bg-gray-100 hover:text-gray-600">
-                <i data-lucide="settings" class="w-4 sm:w-5 h-4 sm:h-5"></i><span>Users</span>
-              </a>
-            </div>
-          </div>
-
-          <!-- User Menu (Shown only if logged in) -->
-          <div class="flex items-center space-x-2 sm:space-x-4">
-            <a href="#" class="flex items-center space-x-1 sm:space-x-2 text-gray-600 hover:text-gray-600">
-              <i data-lucide="user" class="w-3 sm:w-4 h-3 sm:h-4"></i>
-              <span class="hidden sm:block italic text-xs sm:text-sm">Admin</span>
-            </a>
-            <a href="logout.php" class="border border-gray-300 px-2 sm:px-3 py-1 sm:py-1.5 rounded-md text-xs sm:text-sm hover:bg-gray-100">Sign Out</a>
-            <button id="mobile-menu-toggle" class="md:hidden p-1 sm:p-2 rounded-md text-gray-600 hover:text-gray-600 hover:bg-gray-100">
-              <i data-lucide="menu" class="w-5 sm:w-6 h-5 sm:h-6"></i>
-            </button>
-          </div>
-        <?php else: ?>
-          <!-- Login Link (Shown only if not logged in) -->
-          <div class="flex items-center space-x-2 sm:space-x-4">
-            <a href="login.php" class="border border-gray-300 px-2 sm:px-3 py-1 sm:py-1.5 rounded-md text-xs sm:text-sm hover:bg-gray-100">Login</a>
-          </div>
-        <?php endif; ?>
+      <!-- User Menu -->
+      <div class="flex items-center space-x-2">
+        <span class="hidden sm:inline text-gray-700 italic">Admin</span>
+        <a href="logout.php" class="border border-gray-300 px-3 py-1 rounded-md text-sm hover:bg-gray-100">Sign Out</a>
+        <!-- Mobile Toggle -->
+        <button id="mobile-menu-toggle" class="md:hidden p-2 rounded-md hover:bg-gray-100">
+          <i data-lucide="menu" class="w-6 h-6 text-gray-700"></i>
+        </button>
       </div>
+      <?php else: ?>
+      <!-- Not logged in -->
+      <div>
+        <a href="login.php" class="border border-gray-300 px-3 py-1 rounded-md text-sm hover:bg-gray-100">Login</a>
+      </div>
+      <?php endif; ?>
     </div>
-  </header>
+  </div>
+
+  <?php if ($loggedin): ?>
+  <!-- Mobile Navigation -->
+  <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200 shadow-inner transition-all duration-300 ease-in-out">
+    <div class="px-4 py-3 space-y-2">
+      <a href="dashboard.php" class="flex items-center space-x-2 text-gray-700 hover:bg-gray-100 rounded-md px-3 py-2">
+        <i data-lucide="bar-chart-3" class="w-4 h-4"></i><span>Dashboard</span>
+      </a>
+      <a href="inventory.php" class="flex items-center space-x-2 text-gray-700 hover:bg-gray-100 rounded-md px-3 py-2">
+        <i data-lucide="package" class="w-4 h-4"></i><span>Inventory</span>
+      </a>
+      <a href="sales.php" class="flex items-center space-x-2 text-gray-700 hover:bg-gray-100 rounded-md px-3 py-2">
+        <i data-lucide="shopping-cart" class="w-4 h-4"></i><span>Sales</span>
+      </a>
+      <a href="customers.php" class="flex items-center space-x-2 text-gray-700 hover:bg-gray-100 rounded-md px-3 py-2">
+        <i data-lucide="users" class="w-4 h-4"></i><span>Customers</span>
+      </a>
+      <a href="suppliers.php" class="flex items-center space-x-2 text-gray-700 hover:bg-gray-100 rounded-md px-3 py-2">
+        <i data-lucide="truck" class="w-4 h-4"></i><span>Suppliers</span>
+      </a>
+      <a href="users.php" class="flex items-center space-x-2 text-gray-700 hover:bg-gray-100 rounded-md px-3 py-2">
+        <i data-lucide="settings" class="w-4 h-4"></i><span>Users</span>
+      </a>
+      <a href="logout.php" class="flex items-center space-x-2 text-red-600 hover:bg-red-50 rounded-md px-3 py-2">
+        <i data-lucide="log-out" class="w-4 h-4"></i><span>Sign Out</span>
+      </a>
+    </div>
+  </div>
+  <?php endif; ?>
+</header>
 
 <!-- Main Content (Placeholder) -->
 <main class="flex-1">
