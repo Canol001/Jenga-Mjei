@@ -140,67 +140,101 @@ $sales = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
 
     <!-- Sales Table -->
-    <div class="bg-white border border-gray-200 rounded-lg shadow-sm">
-      <div class="p-4">
-        <h3 class="text-xl font-bold text-black flex items-center">
-          <i data-lucide="shopping-cart" class="w-5 h-5 mr-2"></i>
-          SALES HISTORY (<?php echo count($sales); ?>)
-        </h3>
-        <?php
-        if (isset($_SESSION['message'])) {
-            echo '<div class="bg-green-100 text-green-800 p-2 mb-4 text-center">' . htmlspecialchars($_SESSION['message']) . '</div>';
-            unset($_SESSION['message']);
-        }
-        if (isset($_SESSION['error'])) {
-            echo '<div class="bg-red-100 text-red-800 p-2 mb-4 text-center">' . htmlspecialchars($_SESSION['error']) . '</div>';
-            unset($_SESSION['error']);
-        }
-        ?>
-        <p class="text-gray-600 italic">View and manage all sales transactions</p>
-      </div>
-      <div class="p-4 overflow-x-auto">
-        <table class="w-full text-left">
-          <thead>
-            <tr class="border-b border-gray-200">
-              <th class="py-2 text-gray-600 font-semibold">Invoice</th>
-              <th class="py-2 text-gray-600 font-semibold">Customer</th>
-              <th class="py-2 text-gray-600 font-semibold">Items</th>
-              <th class="py-2 text-gray-600 font-semibold">Total</th>
-              <th class="py-2 text-gray-600 font-semibold">Payment</th>
-              <th class="py-2 text-gray-600 font-semibold">Date</th>
-              <th class="py-2 text-gray-600 font-semibold">Status</th>
-              <th class="py-2 text-gray-600 font-semibold">Actions</th>
+<div class="bg-white border border-gray-200 rounded-lg shadow-sm">
+  <div class="p-4">
+    <h3 class="text-xl font-bold text-black flex items-center">
+      <i data-lucide="shopping-cart" class="w-5 h-5 mr-2"></i>
+      SALES HISTORY (<?php echo count($sales); ?>)
+    </h3>
+    <?php
+    if (isset($_SESSION['message'])) {
+        echo '<div class="bg-green-100 text-green-800 p-2 mb-4 text-center">' . htmlspecialchars($_SESSION['message']) . '</div>';
+        unset($_SESSION['message']);
+    }
+    if (isset($_SESSION['error'])) {
+        echo '<div class="bg-red-100 text-red-800 p-2 mb-4 text-center">' . htmlspecialchars($_SESSION['error']) . '</div>';
+        unset($_SESSION['error']);
+    }
+    ?>
+    <p class="text-gray-600 italic">View and manage all sales transactions</p>
+  </div>
+
+  <div class="p-4">
+    <!-- Desktop Table -->
+    <div class="hidden md:block overflow-x-auto">
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="border-b border-gray-200">
+            <th class="py-2 text-gray-600 font-semibold">Invoice</th>
+            <th class="py-2 text-gray-600 font-semibold">Customer</th>
+            <th class="py-2 text-gray-600 font-semibold">Items</th>
+            <th class="py-2 text-gray-600 font-semibold">Total</th>
+            <th class="py-2 text-gray-600 font-semibold">Payment</th>
+            <th class="py-2 text-gray-600 font-semibold">Date</th>
+            <th class="py-2 text-gray-600 font-semibold">Status</th>
+            <th class="py-2 text-gray-600 font-semibold">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php foreach ($sales as $sale) {
+              $itemStmt = $pdo->prepare("SELECT product_name, sku, price, quantity FROM sale_items WHERE sale_id = :sale_id");
+              $itemStmt->execute([':sale_id' => $sale['sale_id']]);
+              $items = $itemStmt->fetchAll(PDO::FETCH_ASSOC);
+              $itemCount = count($items);
+          ?>
+            <tr class="border-b border-gray-100 hover:bg-gray-50">
+              <td class="py-2 font-medium text-black"><?php echo htmlspecialchars($sale['invoice_number']); ?></td>
+              <td class="py-2 text-gray-600"><?php echo htmlspecialchars($sale['customer_name']); ?></td>
+              <td class="py-2 text-gray-600"><?php echo $itemCount . ' item' . ($itemCount !== 1 ? 's' : ''); ?></td>
+              <td class="py-2 font-bold text-black">Ksh.<?php echo number_format($sale['total_amount'], 2); ?></td>
+              <td class="py-2 flex items-center space-x-1 text-gray-600">
+                <i data-lucide="banknote" class="w-4 h-4"></i>
+                <span><?php echo strtolower(htmlspecialchars($sale['payment_method'])); ?></span>
+              </td>
+              <td class="py-2 text-gray-600"><?php echo date('m/d/Y', strtotime($sale['sale_date'])); ?></td>
+              <td class="py-2">
+                <span class="bg-blue-600 text-white text-xs px-2 py-1 rounded-full"><?php echo htmlspecialchars($sale['status']); ?></span>
+              </td>
+              <td class="py-2">
+                <button class="openSaleDetails border border-gray-200 text-black px-2 py-1 rounded hover:bg-gray-100 transition-colors" data-id="<?php echo $sale['sale_id']; ?>">
+                  <i data-lucide="eye" class="w-4 h-4"></i>
+                </button>
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            <?php foreach ($sales as $sale) {
-                // Fetch items for this sale
-                $itemStmt = $pdo->prepare("SELECT product_name, sku, price, quantity FROM sale_items WHERE sale_id = :sale_id");
-                $itemStmt->execute([':sale_id' => $sale['sale_id']]);
-                $items = $itemStmt->fetchAll(PDO::FETCH_ASSOC);
-                $itemCount = count($items);
-            ?>
-              <tr class="border-b border-gray-100 hover:bg-gray-50">
-                <td class="py-2 font-medium text-black" data-label="Invoice"><?php echo htmlspecialchars($sale['invoice_number']); ?></td>
-                <td class="py-2 text-gray-600" data-label="Customer"><?php echo htmlspecialchars($sale['customer_name']); ?></td>
-                <td class="py-2 text-gray-600" data-label="Items"><?php echo $itemCount . ' item' . ($itemCount !== 1 ? 's' : ''); ?></td>
-                <td class="py-2 font-bold text-black" data-label="Total">Ksh.<?php echo number_format($sale['total_amount'], 2); ?></td>
-                <td class="py-2 flex items-center space-x-1 text-gray-600" data-label="Payment">
-                  <i data-lucide="banknote" class="w-4 h-4"></i><span><?php echo strtolower(htmlspecialchars($sale['payment_method'])); ?></span>
-                </td>
-                <td class="py-2 text-gray-600" data-label="Date"><?php echo date('m/d/Y', strtotime($sale['sale_date'])); ?></td>
-                <td class="py-2" data-label="Status"><span class="badge bg-blue-600 text-white"><?php echo htmlspecialchars($sale['status']); ?></span></td>
-                <td class="py-2" data-label="Actions">
-                  <button class="openSaleDetails border border-gray-200 text-black px-2 py-1 rounded hover:bg-gray-100 transition-colors" data-id="<?php echo $sale['sale_id']; ?>">
-                    <i data-lucide="eye" class="w-4 h-4"></i>
-                  </button>
-                </td>
-              </tr>
-            <?php } ?>
-          </tbody>
-        </table>
-      </div>
+          <?php } ?>
+        </tbody>
+      </table>
     </div>
+
+    <!-- Mobile Cards -->
+    <div class="md:hidden space-y-4">
+      <?php foreach ($sales as $sale) {
+          $itemStmt = $pdo->prepare("SELECT product_name, sku, price, quantity FROM sale_items WHERE sale_id = :sale_id");
+          $itemStmt->execute([':sale_id' => $sale['sale_id']]);
+          $items = $itemStmt->fetchAll(PDO::FETCH_ASSOC);
+          $itemCount = count($items);
+      ?>
+        <div class="border border-gray-200 rounded-lg p-3 shadow-sm">
+          <div class="flex justify-between items-center mb-2">
+            <h4 class="font-semibold text-black">Invoice: <?php echo htmlspecialchars($sale['invoice_number']); ?></h4>
+            <span class="bg-blue-600 text-white text-xs px-2 py-1 rounded-full"><?php echo htmlspecialchars($sale['status']); ?></span>
+          </div>
+          <p class="text-sm text-gray-700"><span class="font-medium">Customer:</span> <?php echo htmlspecialchars($sale['customer_name']); ?></p>
+          <p class="text-sm text-gray-700"><span class="font-medium">Items:</span> <?php echo $itemCount . ' item' . ($itemCount !== 1 ? 's' : ''); ?></p>
+          <p class="text-sm text-gray-700"><span class="font-medium">Total:</span> Ksh.<?php echo number_format($sale['total_amount'], 2); ?></p>
+          <p class="text-sm text-gray-700"><span class="font-medium">Payment:</span> <?php echo strtolower(htmlspecialchars($sale['payment_method'])); ?></p>
+          <p class="text-sm text-gray-700"><span class="font-medium">Date:</span> <?php echo date('m/d/Y', strtotime($sale['sale_date'])); ?></p>
+          <div class="mt-2 flex justify-end">
+            <button class="openSaleDetails border border-gray-200 text-black px-2 py-1 rounded hover:bg-gray-100 transition-colors" data-id="<?php echo $sale['sale_id']; ?>">
+              <i data-lucide="eye" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+      <?php } ?>
+    </div>
+  </div>
+</div>
+
 
     <!-- New Sale Modal -->
     <div id="newSaleDialog" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">

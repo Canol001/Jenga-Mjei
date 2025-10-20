@@ -358,73 +358,113 @@ $roleCounts = [
         ?>
       </div>
       <div class="p-4 overflow-x-auto">
-        <table class="w-full">
-          <thead>
-            <tr>
-              <th class="text-left font-bold text-gray-600 py-2">User</th>
-              <th class="text-left font-bold text-gray-600 py-2">Role</th>
-              <th class="text-left font-bold text-gray-600 py-2">Permissions</th>
-              <th class="text-left font-bold text-gray-600 py-2">Last Login</th>
-              <th class="text-left font-bold text-gray-600 py-2">Status</th>
-              <th class="text-left font-bold text-gray-600 py-2">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php foreach ($users as $user) {
-                $permissions = json_decode($user['permissions'], true);
-                $activePermissions = array_sum(array_map('intval', $permissions));
-                $totalPermissions = 6; // Based on the 6 permission types
-            ?>
-              <tr>
-                <td class="py-2" data-label="User">
-                  <div>
-                    <p class="font-medium text-black font-normal"><?php echo htmlspecialchars($user['name']); ?></p>
-                    <div class="flex items-center space-x-2">
-                      <i data-lucide="mail" class="w-3 h-3 text-gray-400"></i>
-                      <span class="text-sm text-gray-600 italic font-normal"><?php echo htmlspecialchars($user['email']); ?></span>
-                    </div>
-                  </div>
-                </td>
-                <td class="py-2" data-label="Role">
-                  <span class="badge bg-<?php echo $user['role'] === 'admin' ? 'red' : ($user['role'] === 'manager' ? 'blue' : ($user['role'] === 'cashier' ? 'green' : 'gray')); ?>-500 text-white">
-                    <?php echo strtoupper($user['role']); ?>
-                  </span>
-                </td>
-                <td class="py-2" data-label="Permissions">
-                  <div class="flex items-center space-x-2">
-                    <i data-lucide="shield" class="w-4 h-4 text-gray-400"></i>
-                    <span class="text-gray-600 font-normal"><?php echo $activePermissions; ?> of <?php echo $totalPermissions; ?></span>
-                  </div>
-                </td>
-                <td class="py-2" data-label="Last Login">
-                  <div class="flex items-center space-x-2">
-                    <i data-lucide="calendar" class="w-4 h-4 text-gray-400"></i>
-                    <span class="text-gray-600 font-normal"><?php echo $user['last_login'] ? date('m/d/Y', strtotime($user['last_login'])) : 'Never'; ?></span>
-                  </div>
-                </td>
-                <td class="py-2" data-label="Status">
-                  <span class="badge bg-<?php echo $user['status'] === 'active' ? 'blue' : ($user['status'] === 'inactive' ? 'red' : 'yellow'); ?>-600 text-white">
-                    <?php echo strtoupper($user['status']); ?>
-                  </span>
-                </td>
-                <td class="py-2" data-label="Actions">
-                  <div class="flex space-x-2">
-                    <button class="toggleStatusBtn border border-gray-200 text-<?php echo $user['status'] === 'active' ? 'orange' : 'green'; ?>-600 px-2 py-1 rounded hover:bg-gray-100 transition-colors" data-email="<?php echo htmlspecialchars($user['email']); ?>" data-status="<?php echo $user['status']; ?>">
-                      <i data-lucide="user-<?php echo $user['status'] === 'active' ? 'x' : 'check'; ?>" class="w-4 h-4"></i>
-                    </button>
-                    <button class="editBtn border border-gray-200 text-black px-2 py-1 rounded hover:bg-gray-100 transition-colors" data-email="<?php echo htmlspecialchars($user['email']); ?>">
-                      <i data-lucide="edit" class="w-4 h-4"></i>
-                    </button>
-                    <button class="deleteBtn border border-gray-200 text-red-600 px-2 py-1 rounded hover:bg-red-50 transition-colors" data-email="<?php echo htmlspecialchars($user['email']); ?>">
-                      <i data-lucide="trash-2" class="w-4 h-4"></i>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            <?php } ?>
-          </tbody>
-        </table>
+  <!-- Desktop View -->
+  <table class="w-full hidden md:table">
+    <thead>
+      <tr>
+        <th class="text-left font-bold text-gray-600 py-2">User</th>
+        <th class="text-left font-bold text-gray-600 py-2">Role</th>
+        <th class="text-left font-bold text-gray-600 py-2">Permissions</th>
+        <th class="text-left font-bold text-gray-600 py-2">Last Login</th>
+        <th class="text-left font-bold text-gray-600 py-2">Status</th>
+        <th class="text-left font-bold text-gray-600 py-2">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <?php foreach ($users as $user) {
+          $permissions = json_decode($user['permissions'], true);
+          $activePermissions = array_sum(array_map('intval', $permissions));
+          $totalPermissions = 6;
+      ?>
+        <tr class="hover:bg-gray-50">
+          <td class="py-2">
+            <div>
+              <p class="font-medium text-black"><?php echo htmlspecialchars($user['name']); ?></p>
+              <div class="flex items-center space-x-2">
+                <i data-lucide="mail" class="w-3 h-3 text-gray-400"></i>
+                <span class="text-sm text-gray-600 italic"><?php echo htmlspecialchars($user['email']); ?></span>
+              </div>
+            </div>
+          </td>
+          <td class="py-2">
+            <span class="badge bg-<?php echo $user['role'] === 'admin' ? 'red' : ($user['role'] === 'manager' ? 'blue' : ($user['role'] === 'cashier' ? 'green' : 'gray')); ?>-500 text-white">
+              <?php echo strtoupper($user['role']); ?>
+            </span>
+          </td>
+          <td class="py-2">
+            <div class="flex items-center space-x-2">
+              <i data-lucide="shield" class="w-4 h-4 text-gray-400"></i>
+              <span class="text-gray-600"><?php echo $activePermissions; ?> of <?php echo $totalPermissions; ?></span>
+            </div>
+          </td>
+          <td class="py-2">
+            <div class="flex items-center space-x-2">
+              <i data-lucide="calendar" class="w-4 h-4 text-gray-400"></i>
+              <span class="text-gray-600"><?php echo $user['last_login'] ? date('m/d/Y', strtotime($user['last_login'])) : 'Never'; ?></span>
+            </div>
+          </td>
+          <td class="py-2">
+            <span class="badge bg-<?php echo $user['status'] === 'active' ? 'blue' : ($user['status'] === 'inactive' ? 'red' : 'yellow'); ?>-600 text-white">
+              <?php echo strtoupper($user['status']); ?>
+            </span>
+          </td>
+          <td class="py-2">
+            <div class="flex space-x-2">
+              <button class="toggleStatusBtn border border-gray-200 text-<?php echo $user['status'] === 'active' ? 'orange' : 'green'; ?>-600 px-2 py-1 rounded hover:bg-gray-100 transition-colors" data-email="<?php echo htmlspecialchars($user['email']); ?>" data-status="<?php echo $user['status']; ?>">
+                <i data-lucide="user-<?php echo $user['status'] === 'active' ? 'x' : 'check'; ?>" class="w-4 h-4"></i>
+              </button>
+              <button class="editBtn border border-gray-200 text-black px-2 py-1 rounded hover:bg-gray-100 transition-colors" data-email="<?php echo htmlspecialchars($user['email']); ?>">
+                <i data-lucide="edit" class="w-4 h-4"></i>
+              </button>
+              <button class="deleteBtn border border-gray-200 text-red-600 px-2 py-1 rounded hover:bg-red-50 transition-colors" data-email="<?php echo htmlspecialchars($user['email']); ?>">
+                <i data-lucide="trash-2" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+      <?php } ?>
+    </tbody>
+  </table>
+
+  <!-- Mobile View -->
+  <div class="md:hidden space-y-4">
+    <?php foreach ($users as $user) {
+        $permissions = json_decode($user['permissions'], true);
+        $activePermissions = array_sum(array_map('intval', $permissions));
+        $totalPermissions = 6;
+    ?>
+      <div class="border rounded-lg p-4 shadow-sm bg-white">
+        <div class="flex justify-between items-center mb-2">
+          <h3 class="font-bold text-black"><?php echo htmlspecialchars($user['name']); ?></h3>
+          <span class="badge bg-<?php echo $user['role'] === 'admin' ? 'red' : ($user['role'] === 'manager' ? 'blue' : ($user['role'] === 'cashier' ? 'green' : 'gray')); ?>-500 text-white">
+            <?php echo strtoupper($user['role']); ?>
+          </span>
+        </div>
+        <p class="text-gray-600 text-sm"><strong>Email:</strong> <?php echo htmlspecialchars($user['email']); ?></p>
+        <p class="text-gray-600 text-sm"><strong>Permissions:</strong> <?php echo $activePermissions; ?> / <?php echo $totalPermissions; ?></p>
+        <p class="text-gray-600 text-sm"><strong>Last Login:</strong> <?php echo $user['last_login'] ? date('m/d/Y', strtotime($user['last_login'])) : 'Never'; ?></p>
+        <p class="mt-2">
+          <span class="badge bg-<?php echo $user['status'] === 'active' ? 'blue' : ($user['status'] === 'inactive' ? 'red' : 'yellow'); ?>-600 text-white">
+            <?php echo strtoupper($user['status']); ?>
+          </span>
+        </p>
+        <div class="mt-3 flex flex-wrap gap-2">
+          <button class="toggleStatusBtn border border-gray-200 text-<?php echo $user['status'] === 'active' ? 'orange' : 'green'; ?>-600 px-2 py-1 rounded hover:bg-gray-100 transition-colors flex items-center gap-1 w-full sm:w-auto" data-email="<?php echo htmlspecialchars($user['email']); ?>" data-status="<?php echo $user['status']; ?>">
+            <i data-lucide="user-<?php echo $user['status'] === 'active' ? 'x' : 'check'; ?>" class="w-4 h-4"></i>
+            Toggle
+          </button>
+          <button class="editBtn border border-gray-200 text-black px-2 py-1 rounded hover:bg-gray-100 transition-colors flex items-center gap-1 w-full sm:w-auto" data-email="<?php echo htmlspecialchars($user['email']); ?>">
+            <i data-lucide="edit" class="w-4 h-4"></i> Edit
+          </button>
+          <button class="deleteBtn border border-gray-200 text-red-600 px-2 py-1 rounded hover:bg-red-50 transition-colors flex items-center gap-1 w-full sm:w-auto" data-email="<?php echo htmlspecialchars($user['email']); ?>">
+            <i data-lucide="trash-2" class="w-4 h-4"></i> Delete
+          </button>
+        </div>
       </div>
+    <?php } ?>
+  </div>
+</div>
+
     </div>
 
     <!-- Permissions Reference Table -->
@@ -437,66 +477,115 @@ $roleCounts = [
         <p class="text-gray-600 italic font-normal">Default permissions for each user role</p>
       </div>
       <div class="p-4 overflow-x-auto">
-        <table class="w-full">
-          <thead>
-            <tr>
-              <th class="text-left font-bold text-gray-600 py-2">Role</th>
-              <th class="text-left font-bold text-gray-600 py-2">Inventory</th>
-              <th class="text-left font-bold text-gray-600 py-2">Sales</th>
-              <th class="text-left font-bold text-gray-600 py-2">Customers</th>
-              <th class="text-left font-bold text-gray-600 py-2">Suppliers</th>
-              <th class="text-left font-bold text-gray-600 py-2">Reports</th>
-              <th class="text-left font-bold text-gray-600 py-2">Users</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="py-2" data-label="Role">
-                <span class="badge bg-red-500 text-white">ADMIN</span>
-              </td>
-              <td class="py-2" data-label="Inventory"><span class="badge bg-blue-600 text-white">Yes</span></td>
-              <td class="py-2" data-label="Sales"><span class="badge bg-blue-600 text-white">Yes</span></td>
-              <td class="py-2" data-label="Customers"><span class="badge bg-blue-600 text-white">Yes</span></td>
-              <td class="py-2" data-label="Suppliers"><span class="badge bg-blue-600 text-white">Yes</span></td>
-              <td class="py-2" data-label="Reports"><span class="badge bg-blue-600 text-white">Yes</span></td>
-              <td class="py-2" data-label="Users"><span class="badge bg-blue-600 text-white">Yes</span></td>
-            </tr>
-            <tr>
-              <td class="py-2" data-label="Role">
-                <span class="badge bg-blue-500 text-white">MANAGER</span>
-              </td>
-              <td class="py-2" data-label="Inventory"><span class="badge bg-blue-600 text-white">Yes</span></td>
-              <td class="py-2" data-label="Sales"><span class="badge bg-blue-600 text-white">Yes</span></td>
-              <td class="py-2" data-label="Customers"><span class="badge bg-blue-600 text-white">Yes</span></td>
-              <td class="py-2" data-label="Suppliers"><span class="badge bg-blue-600 text-white">Yes</span></td>
-              <td class="py-2" data-label="Reports"><span class="badge bg-blue-600 text-white">Yes</span></td>
-              <td class="py-2" data-label="Users"><span class="badge bg-gray-200 text-gray-800">No</span></td>
-            </tr>
-            <tr>
-              <td class="py-2" data-label="Role">
-                <span class="badge bg-green-500 text-white">CASHIER</span>
-              </td>
-              <td class="py-2" data-label="Inventory"><span class="badge bg-gray-200 text-gray-800">No</span></td>
-              <td class="py-2" data-label="Sales"><span class="badge bg-blue-600 text-white">Yes</span></td>
-              <td class="py-2" data-label="Customers"><span class="badge bg-blue-600 text-white">Yes</span></td>
-              <td class="py-2" data-label="Suppliers"><span class="badge bg-gray-200 text-gray-800">No</span></td>
-              <td class="py-2" data-label="Reports"><span class="badge bg-gray-200 text-gray-800">No</span></td>
-              <td class="py-2" data-label="Users"><span class="badge bg-gray-200 text-gray-800">No</span></td>
-            </tr>
-            <tr>
-              <td class="py-2" data-label="Role">
-                <span class="badge bg-gray-500 text-white">VIEWER</span>
-              </td>
-              <td class="py-2" data-label="Inventory"><span class="badge bg-gray-200 text-gray-800">No</span></td>
-              <td class="py-2" data-label="Sales"><span class="badge bg-gray-200 text-gray-800">No</span></td>
-              <td class="py-2" data-label="Customers"><span class="badge bg-gray-200 text-gray-800">No</span></td>
-              <td class="py-2" data-label="Suppliers"><span class="badge bg-gray-200 text-gray-800">No</span></td>
-              <td class="py-2" data-label="Reports"><span class="badge bg-blue-600 text-white">Yes</span></td>
-              <td class="py-2" data-label="Users"><span class="badge bg-gray-200 text-gray-800">No</span></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+  <!-- Desktop View -->
+  <table class="w-full hidden md:table">
+    <thead>
+      <tr>
+        <th class="text-left font-bold text-gray-600 py-2">Role</th>
+        <th class="text-left font-bold text-gray-600 py-2">Inventory</th>
+        <th class="text-left font-bold text-gray-600 py-2">Sales</th>
+        <th class="text-left font-bold text-gray-600 py-2">Customers</th>
+        <th class="text-left font-bold text-gray-600 py-2">Suppliers</th>
+        <th class="text-left font-bold text-gray-600 py-2">Reports</th>
+        <th class="text-left font-bold text-gray-600 py-2">Users</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="py-2"><span class="badge bg-red-500 text-white">ADMIN</span></td>
+        <td class="py-2"><span class="badge bg-blue-600 text-white">Yes</span></td>
+        <td class="py-2"><span class="badge bg-blue-600 text-white">Yes</span></td>
+        <td class="py-2"><span class="badge bg-blue-600 text-white">Yes</span></td>
+        <td class="py-2"><span class="badge bg-blue-600 text-white">Yes</span></td>
+        <td class="py-2"><span class="badge bg-blue-600 text-white">Yes</span></td>
+        <td class="py-2"><span class="badge bg-blue-600 text-white">Yes</span></td>
+      </tr>
+      <tr>
+        <td class="py-2"><span class="badge bg-blue-500 text-white">MANAGER</span></td>
+        <td class="py-2"><span class="badge bg-blue-600 text-white">Yes</span></td>
+        <td class="py-2"><span class="badge bg-blue-600 text-white">Yes</span></td>
+        <td class="py-2"><span class="badge bg-blue-600 text-white">Yes</span></td>
+        <td class="py-2"><span class="badge bg-blue-600 text-white">Yes</span></td>
+        <td class="py-2"><span class="badge bg-blue-600 text-white">Yes</span></td>
+        <td class="py-2"><span class="badge bg-gray-200 text-gray-800">No</span></td>
+      </tr>
+      <tr>
+        <td class="py-2"><span class="badge bg-green-500 text-white">CASHIER</span></td>
+        <td class="py-2"><span class="badge bg-gray-200 text-gray-800">No</span></td>
+        <td class="py-2"><span class="badge bg-blue-600 text-white">Yes</span></td>
+        <td class="py-2"><span class="badge bg-blue-600 text-white">Yes</span></td>
+        <td class="py-2"><span class="badge bg-gray-200 text-gray-800">No</span></td>
+        <td class="py-2"><span class="badge bg-gray-200 text-gray-800">No</span></td>
+        <td class="py-2"><span class="badge bg-gray-200 text-gray-800">No</span></td>
+      </tr>
+      <tr>
+        <td class="py-2"><span class="badge bg-gray-500 text-white">VIEWER</span></td>
+        <td class="py-2"><span class="badge bg-gray-200 text-gray-800">No</span></td>
+        <td class="py-2"><span class="badge bg-gray-200 text-gray-800">No</span></td>
+        <td class="py-2"><span class="badge bg-gray-200 text-gray-800">No</span></td>
+        <td class="py-2"><span class="badge bg-gray-200 text-gray-800">No</span></td>
+        <td class="py-2"><span class="badge bg-blue-600 text-white">Yes</span></td>
+        <td class="py-2"><span class="badge bg-gray-200 text-gray-800">No</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Mobile View -->
+  <div class="md:hidden space-y-4">
+    <!-- ADMIN -->
+    <div class="border rounded-lg p-4 shadow-sm bg-white">
+      <h3 class="font-bold text-black mb-2"><span class="badge bg-red-500 text-white">ADMIN</span></h3>
+      <ul class="text-sm text-gray-700 space-y-1">
+        <li><strong>Inventory:</strong> <span class="badge bg-blue-600 text-white">Yes</span></li>
+        <li><strong>Sales:</strong> <span class="badge bg-blue-600 text-white">Yes</span></li>
+        <li><strong>Customers:</strong> <span class="badge bg-blue-600 text-white">Yes</span></li>
+        <li><strong>Suppliers:</strong> <span class="badge bg-blue-600 text-white">Yes</span></li>
+        <li><strong>Reports:</strong> <span class="badge bg-blue-600 text-white">Yes</span></li>
+        <li><strong>Users:</strong> <span class="badge bg-blue-600 text-white">Yes</span></li>
+      </ul>
+    </div>
+
+    <!-- MANAGER -->
+    <div class="border rounded-lg p-4 shadow-sm bg-white">
+      <h3 class="font-bold text-black mb-2"><span class="badge bg-blue-500 text-white">MANAGER</span></h3>
+      <ul class="text-sm text-gray-700 space-y-1">
+        <li><strong>Inventory:</strong> <span class="badge bg-blue-600 text-white">Yes</span></li>
+        <li><strong>Sales:</strong> <span class="badge bg-blue-600 text-white">Yes</span></li>
+        <li><strong>Customers:</strong> <span class="badge bg-blue-600 text-white">Yes</span></li>
+        <li><strong>Suppliers:</strong> <span class="badge bg-blue-600 text-white">Yes</span></li>
+        <li><strong>Reports:</strong> <span class="badge bg-blue-600 text-white">Yes</span></li>
+        <li><strong>Users:</strong> <span class="badge bg-gray-200 text-gray-800">No</span></li>
+      </ul>
+    </div>
+
+    <!-- CASHIER -->
+    <div class="border rounded-lg p-4 shadow-sm bg-white">
+      <h3 class="font-bold text-black mb-2"><span class="badge bg-green-500 text-white">CASHIER</span></h3>
+      <ul class="text-sm text-gray-700 space-y-1">
+        <li><strong>Inventory:</strong> <span class="badge bg-gray-200 text-gray-800">No</span></li>
+        <li><strong>Sales:</strong> <span class="badge bg-blue-600 text-white">Yes</span></li>
+        <li><strong>Customers:</strong> <span class="badge bg-blue-600 text-white">Yes</span></li>
+        <li><strong>Suppliers:</strong> <span class="badge bg-gray-200 text-gray-800">No</span></li>
+        <li><strong>Reports:</strong> <span class="badge bg-gray-200 text-gray-800">No</span></li>
+        <li><strong>Users:</strong> <span class="badge bg-gray-200 text-gray-800">No</span></li>
+      </ul>
+    </div>
+
+    <!-- VIEWER -->
+    <div class="border rounded-lg p-4 shadow-sm bg-white">
+      <h3 class="font-bold text-black mb-2"><span class="badge bg-gray-500 text-white">VIEWER</span></h3>
+      <ul class="text-sm text-gray-700 space-y-1">
+        <li><strong>Inventory:</strong> <span class="badge bg-gray-200 text-gray-800">No</span></li>
+        <li><strong>Sales:</strong> <span class="badge bg-gray-200 text-gray-800">No</span></li>
+        <li><strong>Customers:</strong> <span class="badge bg-gray-200 text-gray-800">No</span></li>
+        <li><strong>Suppliers:</strong> <span class="badge bg-gray-200 text-gray-800">No</span></li>
+        <li><strong>Reports:</strong> <span class="badge bg-blue-600 text-white">Yes</span></li>
+        <li><strong>Users:</strong> <span class="badge bg-gray-200 text-gray-800">No</span></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
     </div>
   </div>
 

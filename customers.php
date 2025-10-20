@@ -147,7 +147,7 @@ $customers = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <p class="text-gray-600 italic font-normal">Manage customer database and track purchase history</p>
       </div>
 
-      <div class="p-4 overflow-x-auto">
+      <div class="hidden p-4 md:block overflow-x-auto">
         <table class="w-full">
           <thead>
             <tr>
@@ -214,6 +214,40 @@ $customers = $stmt->fetchAll(PDO::FETCH_ASSOC);
           </tbody>
         </table>
       </div>
+
+      <!-- Mobile Cards -->
+    <div class="md:hidden space-y-4">
+      <?php foreach ($customers as $customer) { ?>
+        <div class="border border-gray-200 rounded-lg p-3 shadow-sm">
+          <div class="flex justify-between items-center mb-2">
+            <h4 class="font-semibold text-black"><?php echo htmlspecialchars($customer['name']); ?></h4>
+            <span class="bg-blue-600 text-white text-xs px-2 py-1 rounded-full">
+              <?php echo strtoupper(htmlspecialchars($customer['status'])); ?>
+            </span>
+          </div>
+          <p class="text-sm text-gray-700"><span class="font-medium">ID:</span> <?php echo htmlspecialchars($customer['customer_id'] ?? 'N/A'); ?></p>
+          <p class="text-sm text-gray-700"><span class="font-medium">Email:</span> <?php echo htmlspecialchars($customer['email']); ?></p>
+          <p class="text-sm text-gray-700"><span class="font-medium">Phone:</span> <?php echo htmlspecialchars($customer['phone']); ?></p>
+          <p class="text-sm text-gray-700"><span class="font-medium">Company:</span> <?php echo htmlspecialchars($customer['company'] ?? 'N/A'); ?></p>
+          <p class="text-sm text-gray-700"><span class="font-medium">Total Purchases:</span> $0.00 (0 orders)</p>
+          <p class="text-sm text-gray-700"><span class="font-medium">Last Purchase:</span> N/A</p>
+
+          <div class="mt-3 flex justify-end space-x-2">
+            <button class="viewBtn border border-gray-200 text-black px-2 py-1 rounded hover:bg-gray-100 transition-colors" data-email="<?php echo htmlspecialchars($customer['email']); ?>">
+              <i data-lucide="eye" class="w-4 h-4"></i>
+            </button>
+            <button class="editBtn border border-gray-200 text-black px-2 py-1 rounded hover:bg-gray-100 transition-colors" data-email="<?php echo htmlspecialchars($customer['email']); ?>">
+              <i data-lucide="edit" class="w-4 h-4"></i>
+            </button>
+            <button class="deleteBtn border border-gray-200 text-red-600 px-2 py-1 rounded hover:bg-red-50 transition-colors" data-email="<?php echo htmlspecialchars($customer['email']); ?>">
+              <i data-lucide="trash-2" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+      <?php } ?>
+    </div>
+
+    
     </div>
   </div>
 

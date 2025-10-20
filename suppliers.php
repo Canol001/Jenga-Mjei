@@ -145,42 +145,75 @@ $suppliers = $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
         ?>
       </div>
+      
+      
       <div class="p-4 overflow-x-auto">
-        <table class="w-full">
-          <thead>
-            <tr>
-              <th class="text-left font-bold text-gray-600 py-2">Supplier ID</th>
-              <th class="text-left font-bold text-gray-600 py-2">Name</th>
-              <th class="text-left font-bold text-gray-600 py-2">Contact</th>
-              <th class="text-left font-bold text-gray-600 py-2">Email</th>
-              <th class="text-left font-bold text-gray-600 py-2">Total Orders</th>
-              <th class="text-left font-bold text-gray-600 py-2">Status</th>
-              <th class="text-left font-bold text-gray-600 py-2">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php foreach ($suppliers as $supplier) { ?>
-              <tr class="hover:bg-gray-50">
-                <td class="py-2 text-black font-medium" data-label="Supplier ID"><?php echo htmlspecialchars($supplier['supplier_id']); ?></td>
-                <td class="py-2 text-gray-600" data-label="Name"><?php echo htmlspecialchars($supplier['name']); ?></td>
-                <td class="py-2 text-gray-600" data-label="Contact"><?php echo htmlspecialchars($supplier['contact']); ?></td>
-                <td class="py-2 text-gray-600" data-label="Email"><?php echo htmlspecialchars($supplier['email']); ?></td>
-                <td class="py-2 font-bold text-black" data-label="Total Orders">0</td> <!-- Placeholder, requires order tracking -->
-                <td class="py-2" data-label="Status">
-                  <span class="badge <?php echo $supplier['status'] === 'active' ? 'bg-green-600' : 'bg-gray-200'; ?> text-<?php echo $supplier['status'] === 'active' ? 'white' : 'gray-800'; ?>">
-                    <?php echo strtoupper($supplier['status']); ?>
-                  </span>
-                </td>
-                <td class="py-2" data-label="Actions">
-                  <button class="viewSupplierBtn border border-gray-200 text-black px-2 py-1 rounded hover:bg-gray-100 transition-colors" data-supplier-id="<?php echo htmlspecialchars($supplier['supplier_id']); ?>">
-                    <i data-lucide="eye" class="w-4 h-4"></i>
-                  </button>
-                </td>
-              </tr>
-            <?php } ?>
-          </tbody>
-        </table>
+  <table class="w-full hidden md:table">
+    <thead>
+      <tr>
+        <th class="text-left font-bold text-gray-600 py-2">Supplier ID</th>
+        <th class="text-left font-bold text-gray-600 py-2">Name</th>
+        <th class="text-left font-bold text-gray-600 py-2">Contact</th>
+        <th class="text-left font-bold text-gray-600 py-2">Email</th>
+        <th class="text-left font-bold text-gray-600 py-2">Total Orders</th>
+        <th class="text-left font-bold text-gray-600 py-2">Status</th>
+        <th class="text-left font-bold text-gray-600 py-2">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <?php foreach ($suppliers as $supplier) { ?>
+        <tr class="hover:bg-gray-50">
+          <td class="py-2 text-black font-medium"><?php echo htmlspecialchars($supplier['supplier_id']); ?></td>
+          <td class="py-2 text-gray-600"><?php echo htmlspecialchars($supplier['name']); ?></td>
+          <td class="py-2 text-gray-600"><?php echo htmlspecialchars($supplier['contact']); ?></td>
+          <td class="py-2 text-gray-600"><?php echo htmlspecialchars($supplier['email']); ?></td>
+          <td class="py-2 font-bold text-black">0</td>
+          <td class="py-2">
+            <span class="badge <?php echo $supplier['status'] === 'active' ? 'bg-green-600' : 'bg-gray-200'; ?> text-<?php echo $supplier['status'] === 'active' ? 'white' : 'gray-800'; ?>">
+              <?php echo strtoupper($supplier['status']); ?>
+            </span>
+          </td>
+          <td class="py-2">
+            <button 
+              class="viewSupplierBtn border border-gray-200 text-black px-2 py-1 rounded hover:bg-gray-100 transition-colors" 
+              data-supplier-id="<?php echo htmlspecialchars($supplier['supplier_id']); ?>"
+            >
+              <i data-lucide="eye" class="w-4 h-4"></i>
+            </button>
+          </td>
+        </tr>
+      <?php } ?>
+    </tbody>
+  </table>
+
+  <!-- Mobile View -->
+  <div class="md:hidden space-y-4">
+    <?php foreach ($suppliers as $supplier) { ?>
+      <div class="border rounded-lg p-4 shadow-sm bg-white">
+        <div class="flex justify-between items-center mb-2">
+          <h3 class="font-bold text-black"><?php echo htmlspecialchars($supplier['name']); ?></h3>
+          <span class="badge <?php echo $supplier['status'] === 'active' ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-800'; ?>">
+            <?php echo strtoupper($supplier['status']); ?>
+          </span>
+        </div>
+        <p class="text-gray-600"><strong>ID:</strong> <?php echo htmlspecialchars($supplier['supplier_id']); ?></p>
+        <p class="text-gray-600"><strong>Contact:</strong> <?php echo htmlspecialchars($supplier['contact']); ?></p>
+        <p class="text-gray-600"><strong>Email:</strong> <?php echo htmlspecialchars($supplier['email']); ?></p>
+        <p class="text-gray-800 font-bold mt-1"><strong>Total Orders:</strong> 0</p>
+        <div class="mt-3">
+          <button 
+            class="viewSupplierBtn border border-gray-200 text-black px-2 py-1 rounded hover:bg-gray-100 transition-colors w-full flex justify-center items-center gap-2" 
+            data-supplier-id="<?php echo htmlspecialchars($supplier['supplier_id']); ?>"
+          >
+            <i data-lucide="eye" class="w-4 h-4"></i> View Details
+          </button>
+        </div>
       </div>
+    <?php } ?>
+  </div>
+</div>
+
+
     </div>
   </div>
 
