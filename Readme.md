@@ -68,5 +68,5 @@ This project is licensed under the **MIT License** — you’re free to use, mod
 ---
 
 ## 🧾 Summary
-**Jenga Hardware** is a modern, user-friendly POS and inventory system that simplifies daily sales tracking, stock management, and reporting for hardware stores.  
+**Jenga-Mjei** is a modern, user-friendly POS and inventory system that simplifies daily sales tracking, stock management, and reporting for hardware stores.  
 It’s designed for reliability, scalability, and ease of use — whether you’re managing a small shop or a growing chain.
